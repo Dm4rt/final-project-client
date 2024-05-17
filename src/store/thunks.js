@@ -53,6 +53,20 @@ export const fetchCampusThunk = (id) => async (dispatch) => {  // The THUNK
   }
 };
 
+//Add Student to Campus View
+export const addStudentToCampusThunk = (campusId, student) => async (dispatch) => {
+  try {
+    if (student.id) {
+      await axios.post(`/api/campuses/${campusId}/students`, { studentId: student.id });
+    } else {
+      await axios.post(`/api/campuses/${campusId}/students`, student);
+    }
+    dispatch(ac.fetchCampus(campusId)); 
+  } catch (error) {
+    console.error("Error adding student to campus:", error);
+  }
+};
+
 // All Students
 // THUNK CREATOR:
 export const fetchAllStudentsThunk = () => async (dispatch) => {  // The THUNK
