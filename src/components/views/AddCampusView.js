@@ -6,12 +6,24 @@ const AddCampusView = ({ addCampus }) => {
   const [name, setName] = useState('');
   const [address, setAddress] = useState('');
   const [description, setDescription] = useState('');
-  const [imageUrl, setImageUrl] = useState(''); // New state for image URL
+  const [imageUrl, setImageUrl] = useState('');
+  const [errorMessage, setErrorMessage] = useState('');
   const history = useHistory();
+
+  const validateUrl = (url) => {
+    const regex = /^(https?|chrome):\/\/[^\s$.?#].[^\s]*$/gm;
+    return regex.test(url);
+  };
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    const newCampus = { name, address, description, imageUrl }; // Include image URL in the new campus data
+
+    if (imageUrl && !validateUrl(imageUrl)) {
+      setErrorMessage("Please enter a valid URL.");
+      return;
+    }
+
+    const newCampus = { name, address, description, imageUrl };
     await addCampus(newCampus);
     history.push('/campuses'); // Redirect to campuses list
   };
@@ -34,8 +46,9 @@ const AddCampusView = ({ addCampus }) => {
         </div>
         <div>
           <label>Image URL:</label>
-          <input type="text" value={imageUrl} onChange={(e) => setImageUrl(e.target.value)} /> {/* New input field for image URL */}
+          <input type="text" value={imageUrl} onChange={(e) => setImageUrl(e.target.value)} />
         </div>
+        {errorMessage && <p style={{ color: 'red' }}>{errorMessage}</p>}
         <button type="submit">Add Campus</button>
       </form>
     </div>
@@ -47,5 +60,4 @@ AddCampusView.propTypes = {
 };
 
 export default AddCampusView;
-
 

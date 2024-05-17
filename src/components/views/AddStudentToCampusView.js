@@ -4,7 +4,14 @@ import { Link, useHistory } from "react-router-dom";
 const AddStudentToCampusView = (props) => {
   const { campus, students, addStudentToCampus } = props;
   const [selectedStudentId, setSelectedStudentId] = useState("");
-  const [newStudent, setNewStudent] = useState({ firstname: "", lastname: "" });
+  const [newStudent, setNewStudent] = useState({
+    firstname: "",
+    lastname: "",
+    email: "",
+    imageUrl: "",
+    gpa: ""
+  });
+  const [errorMessage, setErrorMessage] = useState("");
   const history = useHistory();
 
   const handleExistingStudentChange = (event) => {
@@ -18,12 +25,30 @@ const AddStudentToCampusView = (props) => {
     });
   };
 
+  const validateUrl = (url) => {
+    const regex = /^(https?|chrome):\/\/[^\s$.?#].[^\s]*$/gm;
+    return regex.test(url);
+  };
+
   const handleSubmit = async (event) => {
     event.preventDefault();
+
+    // Validate image URL
+    if (newStudent.imageUrl && !validateUrl(newStudent.imageUrl)) {
+      setErrorMessage("Please enter a valid URL.");
+      return;
+    }
+
+    const studentToAdd = {
+      ...newStudent,
+      campusId: campus.id,
+      gpa: parseFloat(newStudent.gpa) || 0.0 // Ensure GPA is a number
+    };
+
     if (selectedStudentId) {
       await addStudentToCampus(campus.id, { id: selectedStudentId });
     } else {
-      await addStudentToCampus(campus.id, { ...newStudent, campusId: campus.id });
+      await addStudentToCampus(campus.id, studentToAdd);
     }
     history.push(`/campus/${campus.id}`);
   };
@@ -62,6 +87,40 @@ const AddStudentToCampusView = (props) => {
           />
         </label>
         <br />
+        <label>
+          Email:
+          <input
+            type="email"
+            name="email"
+            value={newStudent.email}
+            onChange={handleNewStudentChange}
+          />
+        </label>
+        <br />
+        <label>
+          Image URL:
+          <input
+            type="text"
+            name="imageUrl"
+            value={newStudent.imageUrl}
+            onChange={handleNewStudentChange}
+          />
+        </label>
+        <br />
+        <label>
+          GPA:
+          <input
+            type="number"
+            step="0.01"
+            name="GPA"
+            value={newStudent.GPA}
+            onChange={handleNewStudentChange}
+            min="0"
+            max="4"
+          />
+        </label>
+        <br />
+        {errorMessage && <p style={{ color: 'red' }}>{errorMessage}</p>}
         <button type="submit">Add Student</button>
       </form>
       <Link to={`/campus/${campus.id}`}>
