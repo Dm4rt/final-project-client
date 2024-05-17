@@ -8,7 +8,7 @@ import { Link, useHistory } from "react-router-dom";
 import { useEffect, useState } from "react";
 
 const CampusView = (props) => {
-  const { campus, removeStudentFromCampus, deleteCampus } = props; 
+  const { campus, removeStudentFromCampus, deleteCampus } = props;
   const [loading, setLoading] = useState(true);
   const history = useHistory();
 
@@ -23,6 +23,7 @@ const CampusView = (props) => {
   const handleRemoveStudent = async (studentId) => {
     setLoading(true);
     await removeStudentFromCampus(campus.id, studentId);
+    setLoading(false);
   };
 
   const handleDeleteCampus = async () => {
@@ -36,7 +37,7 @@ const CampusView = (props) => {
 
   console.log("Rendering CampusView with campus:", campus);
 
-  const imageUrl = campus.imageUrl || 'https://clipart-library.com/2023/college-building-clipart-xl.png'; // This is the default image URL if the  campus doesn't have one.
+  const imageUrl = campus.imageUrl || 'https://clipart-library.com/2023/college-building-clipart-xl.png'; // This is the default image URL if the campus doesn't have one.
 
   return (
     <div>
@@ -71,4 +72,3 @@ const CampusView = (props) => {
 };
 
 export default CampusView;
-

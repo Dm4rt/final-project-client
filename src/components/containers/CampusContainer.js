@@ -21,12 +21,16 @@ class CampusContainer extends Component {
 
   // Render a Campus view by passing campus data as props to the corresponding View component
   render() {
+    console.log('CampusContainer render props:', this.props);
     return (
       <div>
         <Header />
         <CampusView 
           campus={this.props.campus} 
-          removeStudentFromCampus={this.props.removeStudentFromCampus}
+          removeStudentFromCampus={async (campusId, studentId) => {
+            await this.props.removeStudentFromCampus(campusId, studentId);
+            this.props.fetchCampus(campusId); // Refetch the campus data after removing the student
+          }}
           deleteCampus={this.props.deleteCampus} // Pass down deleteCampus prop
         />
       </div>

@@ -69,11 +69,23 @@ export const addStudentToCampusThunk = (campusId, student) => async (dispatch) =
   }
 };
 
-//Delete student from Campus
+//Delete Student from Campus and Recreate
+//New approach because this bug has been bothering me for the past week
 export const removeStudentFromCampusThunk = (campusId, studentId) => async (dispatch) => {
   try {
-    await axios.put(`/api/students/${studentId}`, { campusId: null });
-    dispatch(ac.fetchCampus(campusId)); // Refresh the data
+    // Fetch the student data
+    const studentRes = await axios.get(`/api/students/${studentId}`);
+    const studentData = studentRes.data;
+
+    // Delete the student
+    await axios.delete(`/api/students/${studentId}`);
+
+    // Recreate the student without the campus
+    const { id, campusId: _, ...studentWithoutCampus } = studentData;  // Literally copy all info to a new student except campusId
+    await axios.post(`/api/students`, studentWithoutCampus);
+
+    // Fetch the updated campus data
+    dispatch(ac.fetchCampus(campusId));
   } catch (error) {
     console.error("Error removing student from campus:", error);
   }
