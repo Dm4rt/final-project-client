@@ -36,9 +36,12 @@ const CampusView = (props) => {
 
   console.log("Rendering CampusView with campus:", campus);
 
+  const imageUrl = campus.imageUrl || 'https://clipart-library.com/2023/college-building-clipart-xl.png'; // This is the default image URL if the  campus doesn't have one.
+
   return (
     <div>
       <h1>{campus.name}</h1>
+      <img src={imageUrl} alt={`${campus.name} campus`} style={{ width: '300px', height: '200px' }} />
       <p>{campus.address}</p>
       <p>{campus.description}</p>
       {campus.students.length === 0 ? (
@@ -68,5 +71,4 @@ const CampusView = (props) => {
 };
 
 export default CampusView;
-
 
