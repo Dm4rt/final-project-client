@@ -78,6 +78,17 @@ export const removeStudentFromCampusThunk = (campusId, studentId) => async (disp
     console.error("Error removing student from campus:", error);
   }
 };
+
+//Edit a Campus
+export const editCampusThunk = (id, campus) => async (dispatch) => {
+  try {
+    let res = await axios.put(`/api/campuses/${id}`, campus);
+    dispatch(ac.fetchCampus(res.data)); 
+  } catch (err) {
+    console.error("Error editing campus:", err);
+  }
+};
+
 // All Students
 // THUNK CREATOR:
 export const fetchAllStudentsThunk = () => async (dispatch) => {  // The THUNK

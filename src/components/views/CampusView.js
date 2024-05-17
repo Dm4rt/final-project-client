@@ -5,18 +5,30 @@ The Views component is responsible for rendering web page with data provided by 
 It constructs a React component to display a single campus and its students (if any).
 ================================================== */
 import { Link } from "react-router-dom";
+import { useEffect, useState } from "react";
 
 const CampusView = (props) => {
-  const { campus, removeStudentFromCampus } = props; // Destructure props to include removeStudentFromCampus
+  const { campus, removeStudentFromCampus } = props; 
+  const [loading, setLoading] = useState(true);
 
-  // Ensure campus and campus.students are defined
-  if (!campus || !campus.students) {
+  useEffect(() => {
+    if (campus && Array.isArray(campus.students)) {
+      setLoading(false);
+    } else {
+      setLoading(true);
+    }
+  }, [campus]);
+
+  const handleRemoveStudent = async (studentId) => {
+    setLoading(true);
+    await removeStudentFromCampus(campus.id, studentId);
+  };
+
+  if (loading) {
     return <div>Loading...</div>;
   }
 
-  const handleRemoveStudent = (studentId) => {
-    removeStudentFromCampus(campus.id, studentId);
-  };
+  console.log("Rendering CampusView with campus:", campus);
 
   return (
     <div>
@@ -38,12 +50,15 @@ const CampusView = (props) => {
           );
         })
       )}
-
       <Link to={`/campus/${campus.id}/add-student`}>
         <button>Add Student</button>
+      </Link>
+      <Link to={`/campus/${campus.id}/edit`}>
+        <button>Edit Campus</button>
       </Link>
     </div>
   );
 };
 
 export default CampusView;
+
