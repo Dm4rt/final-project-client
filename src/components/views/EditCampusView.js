@@ -5,7 +5,8 @@ const EditCampusView = ({ campus, fetchCampus, editCampus }) => {
   const [formState, setFormState] = useState({
     name: '',
     address: '',
-    description: ''
+    description: '',
+    imageUrl: '' // Initialize imageUrl in form state
   });
 
   const history = useHistory();
@@ -15,7 +16,8 @@ const EditCampusView = ({ campus, fetchCampus, editCampus }) => {
       setFormState({
         name: campus.name,
         address: campus.address,
-        description: campus.description
+        description: campus.description,
+        imageUrl: campus.imageUrl || '' // Set imageUrl from campus data or empty string if not present
       });
     }
   }, [campus]);
@@ -68,6 +70,16 @@ const EditCampusView = ({ campus, fetchCampus, editCampus }) => {
             name="description"
             value={formState.description}
             onChange={handleChange}
+          />
+        </label>
+        <br />
+        <label>
+          Image URL:
+          <input
+            type="text"
+            name="imageUrl"
+            value={formState.imageUrl} // Access imageUrl from formState
+            onChange={handleChange} // Use handleChange to update formState
           />
         </label>
         <br />
