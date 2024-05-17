@@ -6,16 +6,18 @@ It constructs a React component to display a single campus and its students (if 
 ================================================== */
 import { Link } from "react-router-dom";
 
-// Take in props data to construct the component
 const CampusView = (props) => {
-  const { campus } = props;
-  
+  const { campus, removeStudentFromCampus } = props; // Destructure props to include removeStudentFromCampus
+
   // Ensure campus and campus.students are defined
   if (!campus || !campus.students) {
     return <div>Loading...</div>;
   }
 
-  // Render a single Campus view with list of its students
+  const handleRemoveStudent = (studentId) => {
+    removeStudentFromCampus(campus.id, studentId);
+  };
+
   return (
     <div>
       <h1>{campus.name}</h1>
@@ -30,7 +32,8 @@ const CampusView = (props) => {
             <div key={student.id}>
               <Link to={`/student/${student.id}`}>
                 <h2>{name}</h2>
-              </Link>             
+              </Link>
+              <button onClick={() => handleRemoveStudent(student.id)}>Remove</button>
             </div>
           );
         })

@@ -63,12 +63,21 @@ export const addStudentToCampusThunk = (campusId, student) => async (dispatch) =
       // Add new student with campusId
       await axios.post(`/api/students`, { ...student, campusId });
     }
-    dispatch(ac.fetchCampus(campusId)); // Refresh campus data to include the new student
+    dispatch(ac.fetchCampus(campusId)); // Refresh data
   } catch (error) {
     console.error("Error adding student to campus:", error);
   }
 };
 
+//Delete student from Campus
+export const removeStudentFromCampusThunk = (campusId, studentId) => async (dispatch) => {
+  try {
+    await axios.put(`/api/students/${studentId}`, { campusId: null });
+    dispatch(ac.fetchCampus(campusId)); // Refresh the data
+  } catch (error) {
+    console.error("Error removing student from campus:", error);
+  }
+};
 // All Students
 // THUNK CREATOR:
 export const fetchAllStudentsThunk = () => async (dispatch) => {  // The THUNK
