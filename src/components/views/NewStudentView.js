@@ -61,6 +61,16 @@ const NewStudentView = (props) => {
             <br />
             <br />
 
+            <label style={{ color: '#11153e', fontWeight: 'bold' }}>Email: </label>
+            <input type="email" name="email" onChange={(e) => handleChange(e)} />
+            <br />
+            <br />
+
+            <label style={{ color: '#11153e', fontWeight: 'bold' }}>Image URL: </label>
+            <input type="text" name="imageUrl" onChange={(e) => handleChange(e)} />
+            <br />
+            <br />
+
             <label style={{ color: '#11153e', fontWeight: 'bold' }}>Campus: </label>
             <select name="campusId" onChange={(e) => handleChange(e)}>
               <option value="">Select a campus</option>
@@ -70,6 +80,11 @@ const NewStudentView = (props) => {
                 </option>
               ))}
             </select>
+            <br />
+            <br />
+
+            <label style={{ color: '#11153e', fontWeight: 'bold' }}>GPA: </label>
+            <input type="number" step="0.1" name="GPA" min="0" max="4" onChange={(e) => handleChange(e)} />
             <br />
             <br />
 
@@ -86,4 +101,5 @@ const NewStudentView = (props) => {
 };
 
 export default NewStudentView;
+
 
