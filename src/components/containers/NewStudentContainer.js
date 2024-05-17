@@ -20,13 +20,15 @@ class NewStudentContainer extends Component {
     this.state = {
       firstname: "", 
       lastname: "", 
+      email: "",
+      imageUrl: "",
       campusId: null, 
+      GPA: "",
       redirect: false, 
       redirectId: null
     };
   }
 
-  // Fetch all campuses when the component mounts
   componentDidMount() {
     this.props.fetchAllCampuses();
   }
@@ -38,14 +40,17 @@ class NewStudentContainer extends Component {
     });
   }
 
-  // Take action after user click the submit button
+  // Take action after user clicks the submit button
   handleSubmit = async event => {
     event.preventDefault();  // Prevent browser reload/refresh after submit.
 
     let student = {
         firstname: this.state.firstname,
         lastname: this.state.lastname,
-        campusId: this.state.campusId
+        email: this.state.email,
+        imageUrl: this.state.imageUrl,
+        campusId: this.state.campusId,
+        GPA: this.state.GPA
     };
     
     // Add new student in back-end database
@@ -55,7 +60,10 @@ class NewStudentContainer extends Component {
     this.setState({
       firstname: "", 
       lastname: "", 
+      email: "",
+      imageUrl: "",
       campusId: null, 
+      GPA: "",
       redirect: true, 
       redirectId: newStudent.id
     });
@@ -78,32 +86,30 @@ class NewStudentContainer extends Component {
       <div>
         <Header />
         <NewStudentView 
-          handleChange={this.handleChange} 
+          handleChange = {this.handleChange} 
           handleSubmit={this.handleSubmit} 
-          campuses={this.props.campuses} // Pass the campuses to the view
+          campuses={this.props.campuses}     
         />
       </div>          
     );
   }
 }
 
-// The following input arguments are passed to the "connect" function used by "NewStudentContainer" component to connect to Redux Store.
-// 1. The "mapState" argument specifies the data from Redux Store that the component needs.
-// The "mapState" is called when the Store State changes, and it returns a data object of "campuses".
+// The following input argument is passed to the "connect" function used by "NewStudentContainer" component to connect to Redux Store.
+// The "mapDispatch" argument is used to dispatch Action (Redux Thunk) to Redux Store.
+// The "mapDispatch" calls the specific Thunk to dispatch its action. The "dispatch" is a function of Redux Store.
 const mapState = (state) => {
   return {
-    campuses: state.allCampuses,
+    campuses: state.allCampuses
   };
 };
 
-// 2. The "mapDispatch" argument is used to dispatch Action (Redux Thunk) to Redux Store.
-// The "mapDispatch" calls the specific Thunk to dispatch its action. The "dispatch" is a function of Redux Store.
 const mapDispatch = (dispatch) => {
   return {
     addStudent: (student) => dispatch(addStudentThunk(student)),
-    fetchAllCampuses: () => dispatch(fetchAllCampusesThunk()), // Fetch all campuses
+    fetchAllCampuses: () => dispatch(fetchAllCampusesThunk())
   };
-};
+}
 
 // Export store-connected container by default
 // NewStudentContainer uses "connect" function to connect to Redux Store and to read values from the Store 
