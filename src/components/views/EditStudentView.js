@@ -36,7 +36,7 @@ const EditStudentView = ({ student, fetchStudent, editStudent, campuses }) => {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    await editStudent(student.id, formState);
+    await editStudent(student.id, formState); // Ensure student.id is correctly passed
     history.push(`/student/${student.id}`);
   };
 
