@@ -1,10 +1,11 @@
-import { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { useState } from "react";
+import { Link, useHistory } from "react-router-dom";
 
 const AddStudentToCampusView = (props) => {
   const { campus, students, addStudentToCampus } = props;
   const [selectedStudentId, setSelectedStudentId] = useState("");
   const [newStudent, setNewStudent] = useState({ firstname: "", lastname: "" });
+  const history = useHistory();
 
   const handleExistingStudentChange = (event) => {
     setSelectedStudentId(event.target.value);
@@ -17,13 +18,14 @@ const AddStudentToCampusView = (props) => {
     });
   };
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
     if (selectedStudentId) {
-      addStudentToCampus(campus.id, { id: selectedStudentId });
+      await addStudentToCampus(campus.id, { id: selectedStudentId });
     } else {
-      addStudentToCampus(campus.id, newStudent);
+      await addStudentToCampus(campus.id, { ...newStudent, campusId: campus.id });
     }
+    history.push(`/campus/${campus.id}`);
   };
 
   return (

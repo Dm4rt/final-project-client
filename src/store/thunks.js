@@ -53,15 +53,17 @@ export const fetchCampusThunk = (id) => async (dispatch) => {  // The THUNK
   }
 };
 
-//Add Student to Campus View
+//Add Student to Campus
 export const addStudentToCampusThunk = (campusId, student) => async (dispatch) => {
   try {
     if (student.id) {
-      await axios.post(`/api/campuses/${campusId}/students`, { studentId: student.id });
+      // Update existing student's campus
+      await axios.put(`/api/students/${student.id}`, { campusId });
     } else {
-      await axios.post(`/api/campuses/${campusId}/students`, student);
+      // Add new student with campusId
+      await axios.post(`/api/students`, { ...student, campusId });
     }
-    dispatch(ac.fetchCampus(campusId)); 
+    dispatch(ac.fetchCampus(campusId)); // Refresh campus data to include the new student
   } catch (error) {
     console.error("Error adding student to campus:", error);
   }
