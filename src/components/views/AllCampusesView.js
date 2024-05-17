@@ -12,13 +12,18 @@ const AllCampusesView = (props) => {
   if (!props.allCampuses.length) {
     return <div>There are no campuses.</div>;
   }
+  
+  //First lets sorth the colleges based on ID
+  //This should sort allCampuse by lowest to highest ID
+  const sortedCampuses = [...props.allCampuses].sort((a, b) => a.id - b.id);
+
 
   // If there is at least one campus, render All Campuses view 
   return (
     <div>
       <h1>All Campuses</h1>
 
-      {props.allCampuses.map((campus) => (
+      {sortedCampuses.map((campus) => (
         <div key={campus.id}>
           <Link to={`/campus/${campus.id}`}>
             <h2>{campus.name}</h2>
